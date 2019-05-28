@@ -25,12 +25,21 @@ SECRET_KEY = '0um(yzdax@vtqy0!b1x=g2j@3el4bv)s1*33@=vjt0gz6arc0x'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [u'118.89.65.154']
+ALLOWED_HOSTS = [
+    '118.89.65.154',
+    '127.0.0.1',
+    '172.18.32.97'
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'account.apps.AccountConfig',
+    'coin.apps.CoinConfig',
+    'assignment.apps.AssignmentConfig',
+    'questionnaire.apps.QuestionnaireConfig',
+    'qa.apps.QaConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -119,4 +128,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
+
+MEDIA_URL = '/media/'

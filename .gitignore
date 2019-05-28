@@ -6,6 +6,19 @@ __pycache__/
 # C extensions
 *.so
 
+# my
+Server/account/migrations/0001_initial.py
+Server/assignment/migrations/0001_initial.py
+Server/coin/migrations/0001_initial.py
+Server/qa/migrations/0001_initial.py
+Server/questionnaire/migrations/0001_initial.py
+
+Server/account/migrations/__pycache__/
+Server/assignment/migrations/__pycache__/
+Server/coin/migrations/__pycache__/
+Server/qa/migrations/__pycache__/
+Server/questionnaire/migrations/__pycache__/
+
 # Distribution / packaging
 .Python
 build/
