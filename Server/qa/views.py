@@ -176,6 +176,15 @@ def answerHelper(request, t_aid, t_qaid):
             )
         except Exception as e:
             return failMSG('create best fail')
+
+        # best user 获得 coin 奖励
+        try:
+            t_c = t_ans.Uid.coins.all()[0]
+            t_c.Coin += t_ans.Aid.Coins
+            t_c.save()
+        except Exception as e:
+            return failMSG('only give coin fail')
+        
         
         return okMSG()
 

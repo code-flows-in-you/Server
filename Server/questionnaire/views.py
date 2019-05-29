@@ -171,13 +171,23 @@ def controller(request, t_aid):
                     Oid = t_opt,
                     Qid = t_que,
                     Aid = t_asg,
-                    Uid = t_uid,
+                    Uid = t_user,
                     Value = ans['value'],
                     TimeStamp = ans['timestamp']
                 )
             except Exception as e:
                 delAns(t_uid, t_aid)
                 return failMSG('db error when create answer')
+
+        # 获得1闲钱报酬
+        try:
+            t_c = t_user.coins.all()[0]
+            t_c.Coin += 1
+            t_asg.Coins -= 1
+            t_c.save()
+            t_asg.save()
+        except Exception as e:
+            return failMSG('only get coin fail')
 
         return okMSG()
 
