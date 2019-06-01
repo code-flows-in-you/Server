@@ -26,11 +26,15 @@ def register(request):
     try:
         t_email = request.POST['email']
         t_password = request.POST['password']
-        t_class = request.POST['class']
+        # t_class = request.POST['class']
+        t_gender = request.POST['gender']
         t_nickname = request.POST['nickname']
     except Exception as e:
         return failMSG('POST parameter error')
-        
+    
+    if t_gender != 'male' or t_gender != 'female':
+        t_gender = 'male'
+
     # 数据库操作
     try:
         t_user = User.objects.filter(Email = t_email)
@@ -41,7 +45,8 @@ def register(request):
             temp = User.objects.create(
                 Email = t_email,
                 Password = t_password,
-                Class = t_class,
+                # Class = t_class,
+                Gender = t_gender,
                 Nickname = t_nickname
             )
             t_ucoin = UserCoin.objects.create(
@@ -106,7 +111,8 @@ def getInfo(request, t_uid):
             temp = {}
             temp['UserID'] = t_user.UserID
             temp['Email'] = t_user.Email
-            temp['Class'] = t_user.Class
+            # temp['Class'] = t_user.Class
+            temp['Gender'] = t_user.Gender
             temp['Nickname'] = t_user.Nickname
             temp['Avatar'] = t_user.Avatar.url
             temp['Description'] = t_user.Description
@@ -114,6 +120,7 @@ def getInfo(request, t_uid):
             temp['College'] = t_user.College
             temp['Major'] = t_user.Major
             temp['StudentID'] = t_user.StudentID
+            temp['RealName'] = t_user.RealName
             
             return okMSG({'data':temp})
         else:
@@ -137,12 +144,14 @@ def self(request):
 
         # 取参数
         try:
-            t_class = request.POST['class']
+            # t_class = request.POST['class']
+            t_gender = request.POST['gender']
             t_nickname = request.POST['nickname']
             t_grade = request.POST['grade']
             t_college = request.POST['college']
             t_major = request.POST['major']
             t_studentID = request.POST['studentID']
+            t_realname = request.POST['realname']
         except Exception as e:
             return failMSG('parameter error')
 
@@ -154,12 +163,14 @@ def self(request):
         else:
             if t_user.count() == 1:
                 t_user = t_user[0]
-                t_user.Class = t_class
+                # t_user.Class = t_class
+                t_user.Gender = t_gender
                 t_user.Nickname = t_nickname
                 t_user.Grade = t_grade
                 t_user.College = t_college
                 t_user.Major = t_major
                 t_user.StudentID = t_studentID
+                t_user.RealName = t_realname
                 t_user.save()
                 return okMSG({'data':temp})
             else:
@@ -182,7 +193,8 @@ def self(request):
             temp = {}
             temp['UserID'] = t_user.UserID
             temp['Email'] = t_user.Email
-            temp['Class'] = t_user.Class
+            # temp['Class'] = t_user.Class
+            temp['Gender'] = t_user.Gender
             temp['Nickname'] = t_user.Nickname
             temp['Avatar'] = t_user.Avatar.url
             temp['Description'] = t_user.Description
@@ -190,6 +202,7 @@ def self(request):
             temp['College'] = t_user.College
             temp['Major'] = t_user.Major
             temp['StudentID'] = t_user.StudentID
+            temp['RealName'] = t_user.RealName
             return okMSG({'data':temp})
         else:
             return failMSG('no such user')
