@@ -93,3 +93,57 @@ def getAsg(t_aid):
             return None, 'no such asg'
 
     return None, 'fail'
+
+def getAsgResponseByClass(start, count, t_type = 'questionnaire'):
+    # 简单检查
+    if start < 0 or count <= 0:
+        return None, 'parameter error'
+
+    if t_type != 'questionnaire' and t_type != 'qa':
+        return None, 'type error'
+
+    response = {}
+    response['assignments'] = []
+    # 数据库操作
+    try:
+        t_asg = Assignment.objects.filter(Type = t_type).reverse()[start:start+count]
+    except Exception as e:
+        return None, 'db error when get rec asg'
+    else:
+        for asg in t_asg:
+            temp = {}
+            temp['title'] = asg.Title
+            temp['description'] = asg.Description
+            temp['type'] = asg.Type
+            temp['aid'] = asg.Aid
+            temp['creator'] = asg.Creator.Nickname
+            temp['coin'] = asg.Coins
+            temp['createTime'] = asg.CreateTime
+            temp['startTime'] = asg.StartTime
+            temp['endTime'] = asg.EndTime
+            response['assignments'].append(temp)
+        return response, None
+
+    return None, 'fail'
+
+def getRecentByClass(request, t_class):
+    # 检查 method
+    if request.method != 'GET':
+        return failMSG('wrong method')
+
+    response, err = getAsgResponse(0, 20, t_class)
+    if err:
+        return failMSG(err)
+
+    return okMSG(response)
+
+def getRecentByClassAndPages(request, t_class, t_pages):
+    # 检查 method
+    if request.method != 'GET':
+        return failMSG('wrong method')
+
+    response, err = getAsgResponse((t_pages-1)*20, 20, t_class)
+    if err:
+        return failMSG(err)
+
+    return okMSG(response)
