@@ -22,6 +22,8 @@ def register(request):
     if request.method != 'POST':
         return failMSG('wrong method')
         
+    # print(request.body)
+
     # 获取参数
     try:
         t_email = request.POST['email']
