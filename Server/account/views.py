@@ -111,13 +111,13 @@ def getInfo(request, t_uid):
         if t_user.count() == 1:
             t_user = t_user[0]
             temp = {}
-            temp['UserID'] = t_user.UserID
+            temp['Uid'] = t_user.UserID
             temp['Email'] = t_user.Email
             # temp['Class'] = t_user.Class
             temp['Gender'] = t_user.Gender
             temp['Nickname'] = t_user.Nickname
             temp['Avatar'] = t_user.Avatar.url
-            temp['Description'] = t_user.Description
+            # temp['Description'] = t_user.Description
             temp['Grade'] = t_user.Grade
             temp['College'] = t_user.College
             temp['Major'] = t_user.Major
