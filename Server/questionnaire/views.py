@@ -240,7 +240,7 @@ def getAnswerByAid(request, t_aid):
         if t_options.count() > 0:
             for os in t_options:
                 response[str(os.oid)] = []
-                t_answers = os.ans 
+                t_answers = os.ans.all() 
                 for answer in t_answers:
                     temp = {}
                     temp['user'] = '%d@%s' % (answer.Uid.UserID, answer.Uid.Nickname)
@@ -330,8 +330,8 @@ def getQuestionnaireResponse(t_aid):
         return None, err
 
     try:
-        t_questions = t_asg.qnn
-        t_options = t_asg.opt
+        t_questions = t_asg.qnn.all()
+        t_options = t_asg.opt.all()
     except Exception as e:
         return None, 'get question or option fail'
 

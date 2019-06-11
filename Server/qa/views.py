@@ -249,8 +249,8 @@ def getQAResponse(t_aid):
         return None, err
 
     try:
-        t_best = t_asg.qab
-        t_answers = t_asg.qas
+        t_best = t_asg.qab.all()
+        t_answers = t_asg.qas.all()
     except Exception as e:
         return None, 'get answers or best fail'
 
