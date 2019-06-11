@@ -49,7 +49,13 @@ def getAsgResponse(start, count):
             temp['createTime'] = asg.CreateTime
             temp['startTime'] = asg.StartTime
             temp['endTime'] = asg.EndTime
+            temp['answerCount'] = 0
+            temp['bestCount'] = 0
+            if asg.Type == 'qa':
+                temp['answerCount'] = asg.qas.all().count()
+                temp['bestCount'] = asg.qab.all().count()
             response['assignments'].append(temp)
+        response['asgCount'] = Assignment.objects.all().count()
         return response, None
 
     return None, 'fail'
@@ -121,7 +127,13 @@ def getAsgResponseByClass(start, count, t_type = 'questionnaire'):
             temp['createTime'] = asg.CreateTime
             temp['startTime'] = asg.StartTime
             temp['endTime'] = asg.EndTime
+            temp['answerCount'] = 0
+            temp['bestCount'] = 0
+            if asg.Type == 'qa':
+                temp['answerCount'] = asg.qas.all().count()
+                temp['bestCount'] = asg.qab.all().count()
             response['assignments'].append(temp)
+        response['asgCount'] = Assignment.objects.filter(Type = t_type).count()
         return response, None
 
     return None, 'fail'
