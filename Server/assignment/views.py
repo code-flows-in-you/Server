@@ -131,7 +131,7 @@ def getRecentByClass(request, t_class):
     if request.method != 'GET':
         return failMSG('wrong method')
 
-    response, err = getAsgResponse(0, 20, t_class)
+    response, err = getAsgResponseByClass(0, 20, t_class)
     if err:
         return failMSG(err)
 
@@ -142,7 +142,7 @@ def getRecentByClassAndPages(request, t_class, t_pages):
     if request.method != 'GET':
         return failMSG('wrong method')
 
-    response, err = getAsgResponse((t_pages-1)*20, 20, t_class)
+    response, err = getAsgResponseByClass((t_pages-1)*20, 20, t_class)
     if err:
         return failMSG(err)
 
