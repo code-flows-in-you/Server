@@ -8,3 +8,4 @@ from .models import *
 admin.site.register(Questions)
 admin.site.register(Options)
 admin.site.register(Answer)
+admin.site.register(QnnCoin)
