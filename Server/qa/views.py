@@ -290,6 +290,7 @@ def getQAResponse(t_aid):
             response['best'] = temp
 
     except Exception as e:
+        print(e)
         return None, 'get qa fail'
 
     return response, None
