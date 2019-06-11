@@ -83,7 +83,7 @@ def getAsg(t_aid):
         return None, 'not integer'
 
     try:
-        t_asg = Assignment.objects.filter(Aid = t_asg)
+        t_asg = Assignment.objects.filter(Aid = t_aid)
     except Exception as e:
         return None, 'db error when get asg'
     else:
