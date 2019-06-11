@@ -4,6 +4,7 @@ from .models import Problem, Answer, Best
 from assignment.models import Assignment
 from assignment.views import *
 from coin.views import checkDeposit
+import logging
 
 def publish(request):
     # 检查登录状态
@@ -290,7 +291,7 @@ def getQAResponse(t_aid):
             response['best'] = temp
 
     except Exception as e:
-        print(e)
+        logging.error(e)
         return None, 'get qa fail'
 
     return response, None
