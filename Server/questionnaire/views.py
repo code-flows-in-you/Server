@@ -2,7 +2,7 @@
 
 from account.views import okMSG, failMSG, searchUser
 from coin.views import checkDeposit
-from .models import Questions, Options, Answer
+from .models import *
 from assignment.models import Assignment
 from assignment.views import *
 import json
@@ -17,7 +17,7 @@ def publish(request):
         return failMSG('wrong method')
 
     # 从 session 获取 uid
-    t_uid = request.session['login_id']
+    t_uid = int(request.session['login_id'])
 
     # 从 body 获取参数
     try:
@@ -25,7 +25,10 @@ def publish(request):
         t_description = request.POST['description']
         t_type = 'questionnaire'
         t_creator = t_uid
-        t_coin = request.POST['coin']
+        # 单份问卷的闲钱奖励
+        t_coin = int(request.POST['coin'])
+        # 问卷份数
+        t_copy = int(request.POST['copy'])
         t_createTime = request.POST['createTime']
         t_startTime = request.POST['startTime']
         t_endTime = request.POST['endTime']
@@ -38,7 +41,7 @@ def publish(request):
     t_creator, err = searchUser(t_creator)
     if err:
         return failMSG(err)
-    err = checkDeposit(t_creator, t_coin)
+    err = checkDeposit(t_creator, t_coin*t_copy)
     if err:
         return failMSG(err)
 
@@ -49,13 +52,23 @@ def publish(request):
             Description = t_description,
             Type = t_type,
             Creator = t_creator,
-            Coins = t_coin,
+            Coins = t_coin * t_copy,
             CreateTime = t_createTime,
             StartTime = t_startTime,
             EndTime = t_endTime
         )
     except Exception as e:
         return failMSG('create asg fail')
+
+    # 创建qnn coin
+    try:
+        t_qc = QnnCoin.objects.create(
+            Aid = t_asg,
+            Coin = t_coin,
+            Copy = t_copy
+        )
+    except Exception as e:
+        return failMSG('create qc fail')
 
     # 准备创建 question 和 option
     # q_length 有多少个 question
@@ -182,8 +195,9 @@ def controller(request, t_aid):
         # 获得1闲钱报酬
         try:
             t_c = t_user.coins.all()[0]
-            t_c.Coin += 1
-            t_asg.Coins -= 1
+            t_one = t_asg.qnncoin.all()[0]
+            t_c.Coin += t_one.Coin
+            t_asg.Coins -= t_one.Coin
             t_c.save()
             t_asg.save()
         except Exception as e:
@@ -328,6 +342,7 @@ def getQuestionnaireResponse(t_aid):
         response['aid'] = t_asg.Aid
         response['creator'] = t_asg.Creator.Nickname
         response['coin'] = t_asg.Coins
+        response['unit'] = t_asg.qnncoin.all()[0].Coin
         response['createTime'] = t_asg.CreateTime
         response['startTime'] = t_asg.StartTime
         response['endTime'] = t_asg.EndTime

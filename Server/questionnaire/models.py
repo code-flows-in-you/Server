@@ -33,3 +33,12 @@ class Answer(models.Model):
 
     def __str__(self):
         return '%d: [%s] [%s]' % (self.ASid, self.Uid.Nickname, self.Value)
+
+class QnnCoin(models.Model):
+    QCid = models.AutoField(primary_key = True)
+    Aid = models.ForeignKey(Assignment, on_delete = models.CASCADE, related_name = 'qnncoin')
+    Coin = models.IntegerField(default = 1)
+    Copy = models.IntegerField(default = 1)
+
+    def __str__(self):
+        return '%d: [%s] [%d*%d]' % (self.QCid, self.Aid.Title, self.Coin, self.Copy)
