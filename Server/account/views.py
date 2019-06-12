@@ -3,6 +3,7 @@ from django.http import HttpResponse
 import json
 from .models import User
 from coin.models import UserCoin
+from django.http import QueryDict
 
 # Create your views here.
 
