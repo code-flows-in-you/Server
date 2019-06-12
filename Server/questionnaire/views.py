@@ -92,6 +92,7 @@ def publish(request):
                 Type = temp['type']
             )
         except Exception as e:
+            print(e)
             return failMSG('create question fail')
 
         # 创建 option
