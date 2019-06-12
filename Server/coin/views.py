@@ -2,6 +2,7 @@
 import json
 from .models import UserCoin
 from account.views import okMSG, failMSG, searchUser
+from account.models import User
 
 def self(request):
 
@@ -9,7 +10,7 @@ def self(request):
     if 'login_id' not in request.session:
         return failMSG('no login')
 
-    t_uid = request.session['login_id']
+    t_uid = int(request.session['login_id'])
 
     # GET 方法
     # 获取coin数量
