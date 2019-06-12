@@ -144,18 +144,21 @@ def self(request):
     # 只能用 PUT
     if request.method == 'PUT':
 
+        put = QueryDict(request.body)
+        print(request.body)
+
         # 取参数
         try:
             # t_class = request.POST['class']
-            t_gender = request.POST['gender']
-            t_nickname = request.POST['nickname']
-            t_grade = request.POST['grade']
-            t_college = request.POST['college']
-            t_major = request.POST['major']
-            t_studentID = request.POST['studentID']
-            t_realname = request.POST['realname']
+            t_gender = put['gender']
+            t_nickname = put['nickname']
+            t_grade = put['grade']
+            t_college = put['college']
+            t_major = put['major']
+            t_studentID = put['studentID']
+            t_realname = put['realname']
         except Exception as e:
-            return failMSG('parameter error')
+            return failMSG('PUT parameter error')
 
         # 数据库操作
         try:
@@ -217,8 +220,8 @@ def changePassword(request):
     if 'login_id' not in request.session:
         return failMSG('no login')
         
-    # 仅接受 POST 方法
-    if request.method != 'POST':
+    # 仅接受 PUT 方法
+    if request.method != 'PUT':
         return failMSG('wrong method')
         
     # 已经登录, 所以拿取用户信息
@@ -226,12 +229,14 @@ def changePassword(request):
     if type(t_uid) != type(1):
         t_uid = int(t_uid)
 
+    put = QueryDict(request.body)
+
     # 获取参数
     try:
-        old_password = request.PUT['old_password']
-        new_password = request.PUT['new_password']
+        old_password = put['old_password']
+        new_password = put['new_password']
     except Exception as e:
-        return failMSG('POST parameter error')
+        return failMSG('PUT parameter error')
         
     # 数据库操作
     try:
