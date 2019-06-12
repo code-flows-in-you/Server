@@ -147,6 +147,8 @@ def self(request):
 
         put = QueryDict(request.body)
         print(request.body)
+        print(put)
+        print(put.get('gender'))
 
         # 取参数
         try:
