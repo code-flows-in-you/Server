@@ -258,14 +258,14 @@ def getAnswerByAid(request, t_aid):
     else:
         if t_options.count() > 0:
             for os in t_options:
-                response[str(os.oid)] = []
+                response[str(os.Oid)] = []
                 t_answers = os.ans.all() 
                 for answer in t_answers:
                     temp = {}
                     temp['user'] = '%d@%s' % (answer.Uid.UserID, answer.Uid.Nickname)
                     temp['value'] = answer.Value
                     temp['timestamp'] = answer.TimeStamp
-                    response[str(os.oid)].append(temp)
+                    response[str(os.Oid)].append(temp)
 
             return okMSG()
         else:
