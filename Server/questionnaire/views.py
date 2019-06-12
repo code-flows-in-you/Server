@@ -97,7 +97,7 @@ def publish(request):
             return failMSG('create question fail')
 
         # 创建 option
-        temp = options[opt_index]
+        temp = t_options[opt_index]
         while temp['questionIndex'] == index:
             has_option = True 
             try:
