@@ -267,7 +267,7 @@ def getAnswerByAid(request, t_aid):
                     temp['timestamp'] = answer.TimeStamp
                     response[str(os.Oid)].append(temp)
 
-            return okMSG()
+            return okMSG(response)
         else:
             return failMSG('no options')
 
