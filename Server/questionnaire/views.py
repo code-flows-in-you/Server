@@ -181,6 +181,8 @@ def controller(request, t_aid):
 
         # 创建 answer
         for ans in t_answers:
+            print(ans)
+            print(ans['qid'])
             t_que, err = getQuestion(ans['qid'])
             if err:
                 delAns(t_uid, t_aid)
