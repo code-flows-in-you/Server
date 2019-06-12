@@ -373,10 +373,10 @@ def getQuestionnaireResponse(t_aid):
 
         for os in t_options:
             temp = {}
-            temp['oid'] = qs.Oid
-            temp['qid'] = qs.Qid.Qid
-            temp['aid'] = qs.Aid.Aid
-            temp['value'] = qs.Value
+            temp['oid'] = os.Oid
+            temp['qid'] = os.Qid.Qid
+            temp['aid'] = os.Aid.Aid
+            temp['value'] = os.Value
             response['options'].append(temp)
     except Exception as e:
         print(e)
