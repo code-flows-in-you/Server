@@ -274,7 +274,7 @@ def getQuestion(t_qid):
         return None, 'not integer'
 
     try:
-        t_que = Questions.objects.filter(Aid = t_qid)
+        t_que = Questions.objects.filter(Qid = t_qid)
     except Exception as e:
         return None, 'db error when get question'
     else:
@@ -293,7 +293,7 @@ def getOption(t_oid):
         return None, 'not integer'
 
     try:
-        t_opt = Options.objects.filter(Aid = t_oid)
+        t_opt = Options.objects.filter(Oid = t_oid)
     except Exception as e:
         return None, 'db error when get question'
     else:
