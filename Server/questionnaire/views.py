@@ -379,6 +379,7 @@ def getQuestionnaireResponse(t_aid):
             temp['value'] = qs.Value
             response['options'].append(temp)
     except Exception as e:
+        print(e)
         return None, 'create qs or os fail'
 
     
