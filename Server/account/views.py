@@ -24,14 +24,18 @@ def register(request):
         return failMSG('wrong method')
         
     # print(request.body)
+    try:
+        rdata = json.loads(request.body)
+    except Exception as e:
+        return failMSG('get json data error')
 
     # 获取参数
     try:
-        t_email = request.POST['email']
-        t_password = request.POST['password']
-        # t_class = request.POST['class']
-        t_gender = request.POST['gender']
-        t_nickname = request.POST['nickname']
+        t_email = rdata['email']
+        t_password = rdata['password']
+        # t_class = rdata['class']
+        t_gender = rdata['gender']
+        t_nickname = rdata['nickname']
     except Exception as e:
         return failMSG('POST parameter error')
     
@@ -75,11 +79,16 @@ def session(request):
     # 下面只接受 POST
     if request.method != 'POST':
         return failMSG('wrong method')
+
+    try:
+        rdata = json.loads(request.body)
+    except Exception as e:
+        return failMSG('get json data error')
         
     # 获取参数
     try:
-        t_email = request.POST['email']
-        t_password = request.POST['password']
+        t_email = rdata['email']
+        t_password = rdata['password']
     except Exception as e:
         return failMSG('POST parameter error')
         
@@ -145,22 +154,24 @@ def self(request):
     # 只能用 PUT
     if request.method == 'PUT':
 
-        put = QueryDict(request.body)
-        print(request.body)
-        print(put)
-        print(put.get('gender'))
+        try:
+            rdata = json.loads(request.body)
+        except Exception as e:
+            return failMSG('get json data error')
+        
 
         # 取参数
         try:
-            # t_class = request.POST['class']
-            t_gender = put['gender']
-            t_nickname = put['nickname']
-            t_grade = put['grade']
-            t_college = put['college']
-            t_major = put['major']
-            t_studentID = put['studentID']
-            t_realname = put['realname']
+            # t_class = rdata['class']
+            t_gender = rdata['gender']
+            t_nickname = rdata['nickname']
+            t_grade = rdata['grade']
+            t_college = rdata['college']
+            t_major = rdata['major']
+            t_studentID = rdata['studentID']
+            t_realname = rdata['realname']
         except Exception as e:
+            print(e)
             return failMSG('PUT parameter error')
 
         # 数据库操作
@@ -180,7 +191,7 @@ def self(request):
                 t_user.StudentID = t_studentID
                 t_user.RealName = t_realname
                 t_user.save()
-                return okMSG({'data':temp})
+                return okMSG()
             else:
                 return failMSG('no such user')
 
@@ -232,12 +243,15 @@ def changePassword(request):
     if type(t_uid) != type(1):
         t_uid = int(t_uid)
 
-    put = QueryDict(request.body)
+    try:
+        rdata = json.loads(request.body)
+    except Exception as e:
+        return failMSG('get json data error')
 
     # 获取参数
     try:
-        old_password = put['old_password']
-        new_password = put['new_password']
+        old_password = rdata['old_password']
+        new_password = rdata['new_password']
     except Exception as e:
         return failMSG('PUT parameter error')
         

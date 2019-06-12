@@ -18,17 +18,22 @@ def publish(request):
     # 从 session 获取 uid
     t_uid = request.session['login_id']
 
+    try:
+        rdata = json.loads(request.body)
+    except Exception as e:
+        return failMSG('get json data error')
+
     # 从 body 获取参数
     try:
-        t_title = request.POST['title']
-        t_description = request.POST['description']
+        t_title = rdata['title']
+        t_description = rdata['description']
         t_type = 'qa'
         t_creator = t_uid
-        t_coin = request.POST['coin']
-        t_createTime = request.POST['createTime']
-        t_startTime = request.POST['startTime']
-        t_endTime = request.POST['endTime']
-        t_detail = request.POST['detail']
+        t_coin = rdata['coin']
+        t_createTime = rdata['createTime']
+        t_startTime = rdata['startTime']
+        t_endTime = rdata['endTime']
+        t_detail = rdata['detail']
     except Exception as e:
         return failMSG('parameter error')
 
@@ -102,10 +107,16 @@ def controller(request, t_aid):
 
     # POST 方法, 提交懂了么回答
     if request.method == 'POST':
+
         try:
-            t_pid = request.POST['pid']
-            t_value = request.POST['answer']
-            t_timestamp = request.POST['timestamp']
+            rdata = json.loads(request.body)
+        except Exception as e:
+            return failMSG('get json data error')
+
+        try:
+            t_pid = rdata['pid']
+            t_value = rdata['answer']
+            t_timestamp = rdata['timestamp']
         except Exception as e:
             return failMSG('body parameter error')
 

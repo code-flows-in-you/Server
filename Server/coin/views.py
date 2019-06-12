@@ -75,7 +75,12 @@ def transaction(request, t_uid):
     self_uid = request.session['login_id']
 
     try:
-        tra_coins = request.POST['coin']
+        rdata = json.loads(request.body)
+    except Exception as e:
+        return failMSG('get json data error')
+
+    try:
+        tra_coins = rdata['coin']
     except Exception as e:
         return failMSG('parameter error')
     

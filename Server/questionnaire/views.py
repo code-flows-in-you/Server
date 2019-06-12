@@ -19,21 +19,26 @@ def publish(request):
     # 从 session 获取 uid
     t_uid = int(request.session['login_id'])
 
+    try:
+        rdata = json.loads(request.body)
+    except Exception as e:
+        return failMSG('get json data error')
+
     # 从 body 获取参数
     try:
-        t_title = request.POST['title']
-        t_description = request.POST['description']
+        t_title = rdata['title']
+        t_description = rdata['description']
         t_type = 'questionnaire'
         t_creator = t_uid
         # 单份问卷的闲钱奖励
-        t_coin = int(request.POST['coin'])
+        t_coin = int(rdata['coin'])
         # 问卷份数
-        t_copy = int(request.POST['copy'])
-        t_createTime = request.POST['createTime']
-        t_startTime = request.POST['startTime']
-        t_endTime = request.POST['endTime']
-        t_questions = request.POST['questions']
-        t_options = request.POST['options']
+        t_copy = int(rdata['copy'])
+        t_createTime = rdata['createTime']
+        t_startTime = rdata['startTime']
+        t_endTime = rdata['endTime']
+        t_questions = rdata['questions']
+        t_options = rdata['options']
     except Exception as e:
         return failMSG('parameter error')
 
@@ -150,8 +155,14 @@ def controller(request, t_aid):
 
     # POST 方法, 提交问卷答案
     if request.method == 'POST':
+
         try:
-            t_answers = request.POST['answers']
+            rdata = json.loads(request.body)
+        except Exception as e:
+            return failMSG('get json data error')
+
+        try:
+            t_answers = rdata['answers']
         except Exception as e:
             return failMSG('body parameter error')
 
