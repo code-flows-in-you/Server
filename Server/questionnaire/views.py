@@ -109,7 +109,10 @@ def publish(request):
             except Exception as e:
                 return failMSG('create option fail')
             opt_index += 1
-            temp = t_options[opt_index]
+            if opt_index < len(t_options):
+                temp = t_options[opt_index]
+            else:
+                break
 
         # 检查是否每个 question 都有 option
         if has_option == False:
