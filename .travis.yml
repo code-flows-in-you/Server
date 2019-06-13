@@ -10,9 +10,6 @@ before_install:
 - eval "$(ssh-agent -s)"
 - chmod 600 id_rsa
 - ssh-add id_rsa
-deploy:
-  provider: script
-  script: bash script/deploy.sh
-  skip_cleanup: true
-  on:
-    branch: master
+script:
+  - pwd
+  - bash script/deploy.sh
