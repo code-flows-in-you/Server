@@ -141,6 +141,7 @@ def controller(request, t_aid):
                 TimeStamp = t_timestamp
             )
         except Exception as e:
+            print(e)
             return failMSG('create qanswer error')
 
         return okMSG()
