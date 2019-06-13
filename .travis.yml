@@ -1,7 +1,7 @@
 language: python
 python:
   - 3.6
-install: true
+# install: true
 addons:
   ssh_known_hosts: 118.89.65.154
 before_deploy:
