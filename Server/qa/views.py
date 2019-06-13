@@ -2,7 +2,7 @@ from account.views import *
 import json
 from .models import Problem, Answer, Best
 from assignment.models import Assignment
-from assignment.views import *
+from assignment.views import getAsg
 from coin.views import checkDeposit
 import logging
 
