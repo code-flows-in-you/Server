@@ -262,6 +262,7 @@ def getQAResponse(t_aid):
     try:
         t_best = t_asg.qab.all()
         t_answers = t_asg.qas.all()
+        t_problem = t_asg.pro.all()[0]
     except Exception as e:
         return None, 'get answers or best fail'
 
@@ -275,6 +276,8 @@ def getQAResponse(t_aid):
         response['createTime'] = t_asg.CreateTime
         response['startTime'] = t_asg.StartTime
         response['endTime'] = t_asg.EndTime
+        response['pid'] = t_problem.Pid
+        response['detail'] = t_problem.Detail
         response['best'] = {}
         response['answers'] = []
     except Exception as e:
