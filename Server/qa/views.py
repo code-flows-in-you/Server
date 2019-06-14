@@ -45,7 +45,7 @@ def publish(request):
     if err:
         return failMSG(err)
 
-    # 创建 assignment
+    # 创建 assignment 并 扣除相应闲钱
     try:
         t_asg = Assignment.objects.create(
             Title = t_title,
@@ -57,6 +57,9 @@ def publish(request):
             StartTime = t_startTime,
             EndTime = t_endTime
         )
+        ctor_coin = t_creator.coins.all()[0]
+        ctor_coin.Coin -= t_coin
+        ctor_coin.save()
     except Exception as e:
         return failMSG('create asg fail')
 
