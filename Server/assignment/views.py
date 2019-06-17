@@ -52,11 +52,13 @@ def getAsgResponse(start, count):
             temp['answerCount'] = 0
             temp['bestCount'] = 0
             temp['unit'] = 0
+            temp['copy'] = 0
             if asg.Type == 'qa':
                 temp['answerCount'] = asg.qas.all().count()
                 temp['bestCount'] = asg.qab.all().count()
             else:
                 temp['unit'] = asg.qnncoin.all()[0].Coin
+                temp['copy'] = asg.qnncoin.all()[0].Copy
             response['assignments'].append(temp)
         response['asgCount'] = Assignment.objects.all().count()
         return response, None
@@ -132,12 +134,14 @@ def getAsgResponseByClass(start, count, t_type = 'questionnaire'):
             temp['endTime'] = asg.EndTime
             temp['answerCount'] = 0
             temp['bestCount'] = 0
-            temp['unit'] = 1
+            temp['unit'] = 0
+            temp['copy'] = 0
             if asg.Type == 'qa':
                 temp['answerCount'] = asg.qas.all().count()
                 temp['bestCount'] = asg.qab.all().count()
             else:
                 temp['unit'] = asg.qnncoin.all()[0].Coin
+                temp['copy'] = asg.qnncoin.all()[0].Copy
             response['assignments'].append(temp)
         response['asgCount'] = Assignment.objects.filter(Type = t_type).count()
         return response, None
