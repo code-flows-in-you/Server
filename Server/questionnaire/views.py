@@ -211,6 +211,7 @@ def controller(request, t_aid):
                     TimeStamp = ans['timestamp']
                 )
             except Exception as e:
+                print(e)
                 delAns(t_uid, t_aid)
                 return failMSG('db error when create answer')
 
