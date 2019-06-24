@@ -5,8 +5,6 @@ from .models import User
 from coin.models import UserCoin
 from django.http import QueryDict
 
-ipport = 'http://118.89.65.154:8765'
-
 # Create your views here.
 
 def okMSG(jsonObj = {}):
@@ -128,7 +126,7 @@ def getInfo(request, t_uid):
             # temp['Class'] = t_user.Class
             temp['Gender'] = t_user.Gender
             temp['Nickname'] = t_user.Nickname
-            temp['Avatar'] = ipport + t_user.Avatar.url
+            temp['Avatar'] = 'http://118.89.65.154:8765' + t_user.Avatar.url
             # temp['Description'] = t_user.Description
             temp['Grade'] = t_user.Grade
             temp['College'] = t_user.College
@@ -217,7 +215,7 @@ def self(request):
             # temp['Class'] = t_user.Class
             temp['Gender'] = t_user.Gender
             temp['Nickname'] = t_user.Nickname
-            temp['Avatar'] = ipport + t_user.Avatar.url
+            temp['Avatar'] = 'http://118.89.65.154:8765' + t_user.Avatar.url
             # temp['Description'] = t_user.Description
             temp['Grade'] = t_user.Grade
             temp['College'] = t_user.College

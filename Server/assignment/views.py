@@ -271,6 +271,8 @@ def getMyAsg(request, t_class):
         if err:
             return failMSG(err)
 
+        
+
         # 数据库操作
         try:
             t_asg = t_user.asg.filter(Type = t_class)
