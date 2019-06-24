@@ -7,7 +7,7 @@ def getRecent(request):
     if request.method != 'GET':
         return failMSG('wrong method')
 
-    response, err = getAsgResponse(0, 20)
+    response, err = getAllAsgResponse()
     if err:
         return failMSG(err)
 
@@ -24,6 +24,42 @@ def getRecentByPages(request, t_pages):
         return failMSG(err)
 
     return okMSG(response)
+
+def getAllAsgResponse():
+    response = {}
+    response['assignments'] = []
+    # 数据库操作
+    try:
+        t_asg = Assignment.objects.all().reverse()
+    except Exception as e:
+        return None, 'db error when get rec asg'
+    else:
+        for asg in t_asg:
+            temp = {}
+            temp['title'] = asg.Title
+            temp['description'] = asg.Description
+            temp['type'] = asg.Type
+            temp['aid'] = asg.Aid
+            temp['creator'] = asg.Creator.Nickname
+            temp['coin'] = asg.Coins
+            temp['createTime'] = asg.CreateTime
+            temp['startTime'] = asg.StartTime
+            temp['endTime'] = asg.EndTime
+            temp['answerCount'] = 0
+            temp['bestCount'] = 0
+            temp['unit'] = 0
+            temp['copy'] = 0
+            if asg.Type == 'qa':
+                temp['answerCount'] = asg.qas.all().count()
+                temp['bestCount'] = asg.qab.all().count()
+            else:
+                temp['unit'] = asg.qnncoin.all()[0].Coin
+                temp['copy'] = asg.qnncoin.all()[0].Copy
+            response['assignments'].append(temp)
+        response['asgCount'] = Assignment.objects.all().count()
+        return response, None
+
+    return None, 'fail'
 
 def getAsgResponse(start, count):
     # 简单检查
@@ -148,12 +184,52 @@ def getAsgResponseByClass(start, count, t_type = 'questionnaire'):
 
     return None, 'fail'
 
+def getAllAsgResponseByClass(t_type = 'questionnaire'):
+
+    if t_type != 'questionnaire' and t_type != 'qa':
+        return None, 'type error'
+
+    response = {}
+    response['assignments'] = []
+    # 数据库操作
+    try:
+        t_asg = Assignment.objects.filter(Type = t_type).reverse()
+    except Exception as e:
+        return None, 'db error when get rec asg'
+    else:
+        for asg in t_asg:
+            temp = {}
+            temp['title'] = asg.Title
+            temp['description'] = asg.Description
+            temp['type'] = asg.Type
+            temp['aid'] = asg.Aid
+            temp['creator'] = asg.Creator.Nickname
+            temp['coin'] = asg.Coins
+            temp['createTime'] = asg.CreateTime
+            temp['startTime'] = asg.StartTime
+            temp['endTime'] = asg.EndTime
+            temp['answerCount'] = 0
+            temp['bestCount'] = 0
+            temp['unit'] = 0
+            temp['copy'] = 0
+            if asg.Type == 'qa':
+                temp['answerCount'] = asg.qas.all().count()
+                temp['bestCount'] = asg.qab.all().count()
+            else:
+                temp['unit'] = asg.qnncoin.all()[0].Coin
+                temp['copy'] = asg.qnncoin.all()[0].Copy
+            response['assignments'].append(temp)
+        response['asgCount'] = Assignment.objects.filter(Type = t_type).count()
+        return response, None
+
+    return None, 'fail'
+
 def getRecentByClass(request, t_class):
     # 检查 method
     if request.method != 'GET':
         return failMSG('wrong method')
 
-    response, err = getAsgResponseByClass(0, 20, t_class)
+    response, err = getAllAsgResponseByClass(t_class)
     if err:
         return failMSG(err)
 
@@ -271,14 +347,14 @@ def getMyAsg(request, t_class):
         if err:
             return failMSG(err)
 
-        
+        t_ans = t_user.qas.all()
 
-        # 数据库操作
         try:
-            t_asg = t_user.asg.filter(Type = t_class)
-        except Exception as e:
-            return failMSG('db error when get my asg')
-        else:
+            t_asg = set()
+
+            for x in t_ans:
+                t_asg.add(x.Aid)
+            
             for asg in t_asg:
                 temp = {}
                 temp['title'] = asg.Title
@@ -303,6 +379,8 @@ def getMyAsg(request, t_class):
                 response['assignments'].append(temp)
             response['asgCount'] = t_asg.count()
             return okMSG(response)
-        return failMSG('fail')
+        except Exception as e:
+            print(e)
+            return failMSG('my answer fail')
 
     return failMSG('fail')

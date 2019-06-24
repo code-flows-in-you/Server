@@ -301,7 +301,7 @@ def uploadAvatar(request):
             t_user = t_user[0]
             t_user.Avatar = request.FILES['file']
             t_user.save()
-            return okMSG({'url':t_user.Avatar.url})
+            return okMSG({'url':'http://118.89.65.154:8765' + t_user.Avatar.url})
 
     return failMSG('fail')
 
