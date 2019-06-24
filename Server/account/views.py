@@ -287,7 +287,9 @@ def uploadAvatar(request):
 
     # test
     # t_username = '123'
-    # print(request.FILES)
+    print(request)
+    print(request.body)
+    print(request.FILES)
 
     # 数据库操作
     try:
