@@ -1,8 +1,9 @@
 # Create your views here.
 import json
-from .models import UserCoin
+from .models import UserCoin, CoinFlow
 from account.views import okMSG, failMSG, searchUser
 from account.models import User
+import time
 
 def self(request):
 
@@ -39,6 +40,14 @@ def self(request):
                 t_coin = t_user[0].coins.all()[0]
                 t_coin.Coin = t_coin.Coin + 100
                 t_coin.save()
+                # flow
+                t_flow = CoinFlow.objects.create(
+                    Uid = t_user[0],
+                    Title = '充值',
+                    Type = 'Recharge',
+                    TimeStamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
+                    Flow = 100
+                )
                 return okMSG({'coin':t_coin.Coin})
             else:
                 return failMSG('no such user')
@@ -56,6 +65,14 @@ def self(request):
                 if t_coin.Coin >= 50:
                     t_coin.Coin = t_coin.Coin - 50
                     t_coin.save()
+                    # flow
+                    t_flow = CoinFlow.objects.create(
+                        Uid = t_user[0],
+                        Title = '丢失',
+                        Type = 'lose',
+                        TimeStamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
+                        Flow = -50
+                    )
                     return okMSG({'coin':t_coin.Coin})
                 return failMSG('not enough coin')
             else:
@@ -99,6 +116,22 @@ def transaction(request, t_uid):
                 o_coin.Coin = o_coin.Coin + tra_coins
                 t_coin.save()
                 o_coin.save()
+                # flow
+                t_flow = CoinFlow.objects.create(
+                    Uid = t_user[0],
+                    Title = '交易',
+                    Type = 'transaction',
+                    TimeStamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
+                    Flow = -tra_coins
+                )
+                # flow
+                t_flow = CoinFlow.objects.create(
+                    Uid = o_user[0],
+                    Title = '交易',
+                    Type = 'transaction',
+                    TimeStamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
+                    Flow = tra_coins
+                )
                 return okMSG({'coin':t_coin.Coin})
             else:
                 return failMSG('not enough coin')
@@ -150,3 +183,42 @@ def checkDeposit(t_user, t_coin):
 
     return 'not enough coin'
 
+def flow(request):
+    # 检查登录状态
+    if 'login_id' not in request.session:
+        return failMSG('no login')
+
+    # 检查方法
+    if request.method != 'GET':
+        return failMSG('method error')
+
+    t_uid = request.session['login_id']
+
+    t_user, err = searchUser(t_user)
+    if err:
+        return failMSG(err)
+
+    try:
+        t_flow = t_user.cf.all()
+    except Exception as e:
+        print(e)
+        return failMSG('db error when get flow')
+    else:
+        response = {}
+        response['flows'] = []
+
+        try:
+            for t_f in t_flow:
+                temp = {}
+                temp['title'] = t_f.Title
+                temp['type'] = t_f.Type
+                temp['flow'] = t_f.Flow
+                temp['timestamp'] = t_f.TimeStamp
+                response['flows'].append(temp)
+        except Exception as e:
+            print(e)
+            return failMSG('create flow fail')
+        else:
+            return okMSG(response)
+
+    return failMSG('fail')

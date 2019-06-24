@@ -2,10 +2,12 @@
 
 from account.views import okMSG, failMSG, searchUser
 from coin.views import checkDeposit
+from coin.models import CoinFlow
 from .models import *
 from assignment.models import Assignment
 from assignment.views import *
 import json
+import time
 
 def publish(request):
     # 检查登录状态
@@ -65,6 +67,14 @@ def publish(request):
         ctor_coin = t_creator.coins.all()[0]
         ctor_coin.Coin -= t_coin
         ctor_coin.save()
+        # flow
+        t_flow = CoinFlow.objects.create(
+            Uid = t_creator,
+            Title = t_title,
+            Type = 'create questionnaire',
+            TimeStamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
+            Flow = -t_coin
+        )
     except Exception as e:
         return failMSG('create asg fail')
 
@@ -215,7 +225,7 @@ def controller(request, t_aid):
                 delAns(t_uid, t_aid)
                 return failMSG('db error when create answer')
 
-        # 获得1闲钱报酬
+        # 获得t_one.Coin闲钱报酬
         try:
             t_c = t_user.coins.all()[0]
             t_one = t_asg.qnncoin.all()[0]
@@ -223,6 +233,14 @@ def controller(request, t_aid):
             t_asg.Coins -= t_one.Coin
             t_c.save()
             t_asg.save()
+            # flow
+            t_flow = CoinFlow.objects.create(
+                Uid = t_user,
+                Title = t_asg.Title,
+                Type = 'post questionnaire',
+                TimeStamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
+                Flow = t_one.Coin
+            )
         except Exception as e:
             return failMSG('only get coin fail')
 

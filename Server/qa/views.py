@@ -4,7 +4,9 @@ from .models import Problem, Answer, Best
 from assignment.models import Assignment
 from assignment.views import getAsg
 from coin.views import checkDeposit
+from coin.models import CoinFlow
 import logging
+import time
 
 def publish(request):
     # 检查登录状态
@@ -60,6 +62,14 @@ def publish(request):
         ctor_coin = t_creator.coins.all()[0]
         ctor_coin.Coin -= t_coin
         ctor_coin.save()
+        # flow
+        t_flow = CoinFlow.objects.create(
+            Uid = t_creator,
+            Title = t_title,
+            Type = 'create qa',
+            TimeStamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
+            Flow = -t_coin
+        )
     except Exception as e:
         return failMSG('create asg fail')
 
@@ -198,6 +208,14 @@ def answerHelper(request, t_aid, t_qaid):
             t_c = t_ans.Uid.coins.all()[0]
             t_c.Coin += t_ans.Aid.Coins
             t_c.save()
+            # flow
+            t_flow = CoinFlow.objects.create(
+                Uid = t_ans.Uid,
+                Title = t_ans.Aid.Title,
+                Type = 'adoption',
+                TimeStamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
+                Flow = t_ans.Aid.Coins
+            )
         except Exception as e:
             return failMSG('only give coin fail')
         
