@@ -1,4 +1,4 @@
-from account.views import okMSG, failMSG
+from account.views import okMSG, failMSG, searchUser
 from .models import Assignment
 from questionnaire.models import Answer, Options, Questions
 
@@ -169,3 +169,138 @@ def getRecentByClassAndPages(request, t_class, t_pages):
         return failMSG(err)
 
     return okMSG(response)
+
+def getMyAsg(request, t_class):
+    # 检查 method
+    if request.method != 'GET':
+        return failMSG('wrong method')
+
+    # 检查登录状态
+    if 'login_id' not in request.session:
+        return failMSG('no login')
+
+    # 从 session 获取 uid
+    t_uid = int(request.session['login_id'])
+
+    # 检查 get 参数
+    if t_class != 'all' and t_class != 'questionnaire' and t_class != 'qa' and t_class != 'answer':
+        return failMSG('parameter error')
+
+    if t_class == 'all':
+        response = {}
+        response['assignments'] = []
+        t_user, err = searchUser(t_uid)
+        if err:
+            return failMSG(err)
+
+        # 数据库操作
+        try:
+            t_asg = t_user.asg.all()
+        except Exception as e:
+            return failMSG('db error when get my asg')
+        else:
+            for asg in t_asg:
+                temp = {}
+                temp['title'] = asg.Title
+                temp['description'] = asg.Description
+                temp['type'] = asg.Type
+                temp['aid'] = asg.Aid
+                temp['creator'] = asg.Creator.Nickname
+                temp['coin'] = asg.Coins
+                temp['createTime'] = asg.CreateTime
+                temp['startTime'] = asg.StartTime
+                temp['endTime'] = asg.EndTime
+                temp['answerCount'] = 0
+                temp['bestCount'] = 0
+                temp['unit'] = 0
+                temp['copy'] = 0
+                if asg.Type == 'qa':
+                    temp['answerCount'] = asg.qas.all().count()
+                    temp['bestCount'] = asg.qab.all().count()
+                else:
+                    temp['unit'] = asg.qnncoin.all()[0].Coin
+                    temp['copy'] = asg.qnncoin.all()[0].Copy
+                response['assignments'].append(temp)
+            response['asgCount'] = t_asg.count()
+            return okMSG(response)
+        return failMSG('fail')
+
+    if t_class == 'questionnaire' or t_class == 'qa':
+        response = {}
+        response['assignments'] = []
+        t_user, err = searchUser(t_uid)
+        if err:
+            return failMSG(err)
+
+        # 数据库操作
+        try:
+            t_asg = t_user.asg.filter(Type = t_class)
+        except Exception as e:
+            return failMSG('db error when get my asg')
+        else:
+            for asg in t_asg:
+                temp = {}
+                temp['title'] = asg.Title
+                temp['description'] = asg.Description
+                temp['type'] = asg.Type
+                temp['aid'] = asg.Aid
+                temp['creator'] = asg.Creator.Nickname
+                temp['coin'] = asg.Coins
+                temp['createTime'] = asg.CreateTime
+                temp['startTime'] = asg.StartTime
+                temp['endTime'] = asg.EndTime
+                temp['answerCount'] = 0
+                temp['bestCount'] = 0
+                temp['unit'] = 0
+                temp['copy'] = 0
+                if asg.Type == 'qa':
+                    temp['answerCount'] = asg.qas.all().count()
+                    temp['bestCount'] = asg.qab.all().count()
+                else:
+                    temp['unit'] = asg.qnncoin.all()[0].Coin
+                    temp['copy'] = asg.qnncoin.all()[0].Copy
+                response['assignments'].append(temp)
+            response['asgCount'] = t_asg.count()
+            return okMSG(response)
+        return failMSG('fail')
+
+    if t_class == 'answer':
+        response = {}
+        response['assignments'] = []
+        t_user, err = searchUser(t_uid)
+        if err:
+            return failMSG(err)
+
+        # 数据库操作
+        try:
+            t_asg = t_user.asg.filter(Type = t_class)
+        except Exception as e:
+            return failMSG('db error when get my asg')
+        else:
+            for asg in t_asg:
+                temp = {}
+                temp['title'] = asg.Title
+                temp['description'] = asg.Description
+                temp['type'] = asg.Type
+                temp['aid'] = asg.Aid
+                temp['creator'] = asg.Creator.Nickname
+                temp['coin'] = asg.Coins
+                temp['createTime'] = asg.CreateTime
+                temp['startTime'] = asg.StartTime
+                temp['endTime'] = asg.EndTime
+                temp['answerCount'] = 0
+                temp['bestCount'] = 0
+                temp['unit'] = 0
+                temp['copy'] = 0
+                if asg.Type == 'qa':
+                    temp['answerCount'] = asg.qas.all().count()
+                    temp['bestCount'] = asg.qab.all().count()
+                else:
+                    temp['unit'] = asg.qnncoin.all()[0].Coin
+                    temp['copy'] = asg.qnncoin.all()[0].Copy
+                response['assignments'].append(temp)
+            response['asgCount'] = t_asg.count()
+            return okMSG(response)
+        return failMSG('fail')
+
+    return failMSG('fail')

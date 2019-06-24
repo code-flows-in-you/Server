@@ -7,4 +7,5 @@ urlpatterns = [
     path('', views.getRecent, name='getRecent'),
     path('<str:t_class>', views.getRecentByClass, name='getRecentByClass'),
     path('<str:t_class>/<int:t_pages>', views.getRecentByClassAndPages, name='getRecentByClassAndPages'),
+    path('self/<str:t_class>', views.getMyAsg, name='getMyAsg'),
 ]
