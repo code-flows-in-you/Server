@@ -194,7 +194,7 @@ def flow(request):
 
     t_uid = request.session['login_id']
 
-    t_user, err = searchUser(t_user)
+    t_user, err = searchUser(t_uid)
     if err:
         return failMSG(err)
 
