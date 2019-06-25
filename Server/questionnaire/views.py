@@ -389,6 +389,16 @@ def getQuestionnaireResponse(t_aid):
         response['endTime'] = t_asg.EndTime
         response['questions'] = []
         response['options'] = []
+        response['answerCount'] = 0
+        response['bestCount'] = 0
+        response['unit'] = 0
+        response['copy'] = 0
+        if t_asg.Type == 'qa':
+            response['answerCount'] = t_asg.qas.all().count()
+            response['bestCount'] = t_asg.qab.all().count()
+        else:
+            response['unit'] = t_asg.qnncoin.all()[0].Coin
+            response['copy'] = t_asg.qnncoin.all()[0].Copy
     except Exception as e:
         return None, 'create dict fail'
     
