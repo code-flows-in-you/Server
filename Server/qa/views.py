@@ -294,6 +294,7 @@ def getQAResponse(t_aid):
         response['type'] = t_asg.Type
         response['aid'] = t_asg.Aid
         response['creator'] = t_asg.Creator.Nickname
+        response['avatar'] = t_asg.Creator.Avatar.url
         response['coin'] = t_asg.Coins
         response['createTime'] = t_asg.CreateTime
         response['startTime'] = t_asg.StartTime
