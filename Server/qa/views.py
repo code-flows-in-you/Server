@@ -314,6 +314,7 @@ def getQAResponse(t_aid):
             temp['user'] = '%d@%s' % (qas.Uid.UserID, qas.Uid.Nickname)
             temp['timestamp'] = qas.TimeStamp
             temp['answer'] = qas.Value
+            temp['avatar'] = 'http://118.89.65.154:8765' + qas.Uid.Avatar.url
             response['answers'].append(temp)
 
         if t_best.count() > 0:
@@ -324,6 +325,7 @@ def getQAResponse(t_aid):
             temp['user'] = '%d@%s' % (t_best.Uid.UserID, t_best.Uid.Nickname)
             temp['timestamp'] = t_best.TimeStamp
             temp['answer'] = t_best.Value
+            temp['avatar'] = 'http://118.89.65.154:8765' + t_best.Uid.Avatar.url
             response['best'] = temp
 
     except Exception as e:
