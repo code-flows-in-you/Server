@@ -73,7 +73,7 @@ def publish(request):
             Title = t_title,
             Type = 'create questionnaire',
             TimeStamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
-            Flow = -t_coin
+            Flow = -t_coin*t_copy
         )
     except Exception as e:
         return failMSG('create asg fail')
