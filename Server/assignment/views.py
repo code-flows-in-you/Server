@@ -377,7 +377,7 @@ def getMyAsg(request, t_class):
                     temp['unit'] = asg.qnncoin.all()[0].Coin
                     temp['copy'] = asg.qnncoin.all()[0].Copy
                 response['assignments'].append(temp)
-            response['asgCount'] = t_asg.count()
+            # response['asgCount'] = t_asg.count()
             return okMSG(response)
         except Exception as e:
             print(e)
