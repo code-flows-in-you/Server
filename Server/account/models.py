@@ -16,10 +16,10 @@ class User(models.Model):
     # not required
     Avatar = models.ImageField(upload_to = 'avatar', storage = ImageStorage(), default = 'avatar/default.jpg') 
     Grade = models.CharField(max_length = 4, default = '2018')
-    College = models.CharField(max_length = 30, default = 'secret')
-    Major = models.CharField(max_length = 20, default = 'secret')
+    College = models.CharField(max_length = 30, default = '未填写')
+    Major = models.CharField(max_length = 20, default = '未填写')
     StudentID = models.IntegerField(default = 0)
-    RealName = models.CharField(max_length = 12, default = 'secret')
+    RealName = models.CharField(max_length = 12, default = '未填写')
 
     def __str__(self):
         return '%d: [%s][%s]' % (self.UserID, self.Email, self.Nickname)
