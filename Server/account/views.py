@@ -163,13 +163,13 @@ def self(request):
         # 取参数
         try:
             # t_class = rdata['class']
-            t_gender = rdata['gender']
-            t_nickname = rdata['nickname']
-            t_grade = rdata['grade']
-            t_college = rdata['college']
-            t_major = rdata['major']
-            t_studentID = rdata['studentID']
-            t_realname = rdata['realname']
+            t_gender = rdata['Gender']
+            t_nickname = rdata['Nickname']
+            t_grade = rdata['Grade']
+            t_college = rdata['College']
+            t_major = rdata['Major']
+            t_studentID = rdata['StudentID']
+            t_realname = rdata['RealName']
         except Exception as e:
             print(e)
             return failMSG('PUT parameter error')
