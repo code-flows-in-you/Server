@@ -71,8 +71,8 @@ def getAsgResponse(start, count):
     # 数据库操作
     try:
         # t_asg = Assignment.objects.all().reverse()[start:start+count]
-        t_asg = Assignment.objects.all()[start:start+count]
-        t_asg = Assignment.objects.order_by('-CreateTime')[start:start+count]
+        # t_asg = Assignment.objects.all()[start:start+count]
+        t_asg = Assignment.objects.all().order_by('CreateTime')[start:start+count]
     except Exception as e:
         return None, 'db error when get rec asg'
     else:
