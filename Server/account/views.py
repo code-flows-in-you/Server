@@ -342,7 +342,7 @@ def amount(request):
         response['answerCount'] = t_user.qas.all().count()
         response['bestCount'] = t_user.qab.all().count()
         response['assignmentCount'] = t_user.asg.all().count()
-        response['coin'] = t_user.coins.all().count()
+        response['coin'] = t_user.coins.all()[0].Coin
     except Exception as e:
         print(e)
         return failMSG('create response error')
