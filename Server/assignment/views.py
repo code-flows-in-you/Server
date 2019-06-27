@@ -30,7 +30,7 @@ def getAllAsgResponse():
     response['assignments'] = []
     # 数据库操作
     try:
-        t_asg = Assignment.objects.all().reverse()
+        t_asg = Assignment.objects.all().order_by('-CreateTime')
     except Exception as e:
         return None, 'db error when get rec asg'
     else:
@@ -72,7 +72,7 @@ def getAsgResponse(start, count):
     try:
         # t_asg = Assignment.objects.all().reverse()[start:start+count]
         # t_asg = Assignment.objects.all()[start:start+count]
-        t_asg = Assignment.objects.all().order_by('CreateTime')[start:start+count]
+        t_asg = Assignment.objects.all().order_by('-CreateTime')[start:start+count]
     except Exception as e:
         return None, 'db error when get rec asg'
     else:
@@ -155,7 +155,7 @@ def getAsgResponseByClass(start, count, t_type = 'questionnaire'):
     response['assignments'] = []
     # 数据库操作
     try:
-        t_asg = Assignment.objects.filter(Type = t_type).reverse()[start:start+count]
+        t_asg = Assignment.objects.filter(Type = t_type).order_by('-CreateTime')[start:start+count]
     except Exception as e:
         return None, 'db error when get rec asg'
     else:
@@ -195,7 +195,7 @@ def getAllAsgResponseByClass(t_type = 'questionnaire'):
     response['assignments'] = []
     # 数据库操作
     try:
-        t_asg = Assignment.objects.filter(Type = t_type).reverse()
+        t_asg = Assignment.objects.filter(Type = t_type).order_by('-CreateTime')
     except Exception as e:
         return None, 'db error when get rec asg'
     else:
@@ -273,7 +273,7 @@ def getMyAsg(request, t_class):
 
         # 数据库操作
         try:
-            t_asg = t_user.asg.all()
+            t_asg = t_user.asg.all().order_by('-CreateTime')
         except Exception as e:
             return failMSG('db error when get my asg')
         else:
@@ -312,7 +312,7 @@ def getMyAsg(request, t_class):
 
         # 数据库操作
         try:
-            t_asg = t_user.asg.filter(Type = t_class)
+            t_asg = t_user.asg.filter(Type = t_class).order_by('-CreateTime')
         except Exception as e:
             return failMSG('db error when get my asg')
         else:
