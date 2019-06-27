@@ -207,7 +207,7 @@ def flow(request):
         return failMSG(err)
 
     try:
-        t_flow = t_user.cf.all()
+        t_flow = t_user.cf.all().order_by('-TimeStamp')
     except Exception as e:
         print(e)
         return failMSG('db error when get flow')
