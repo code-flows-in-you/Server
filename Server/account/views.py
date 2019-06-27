@@ -333,7 +333,9 @@ def amount(request):
     if type(t_uid) != type(1):
         t_uid = int(t_uid)
 
-    t_user = searchUser(t_uid)
+    t_user, err = searchUser(t_uid)
+    if err:
+        return failMSG(err)
 
     try:
         response = {}
