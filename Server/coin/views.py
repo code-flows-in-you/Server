@@ -29,8 +29,16 @@ def self(request):
                 return failMSG('no such user')
 
     # POST 方法
-    # 充值100闲钱
+    # 充值闲钱
     if request.method == 'POST':
+
+        try:
+            rdata = json.loads(request.body)
+        except Exception as e:
+            return failMSG('get json data error')
+
+        t_c = rdata['coin']
+
         try:
             t_user = User.objects.filter(UserID = t_uid)
         except Exception as e:
@@ -38,7 +46,7 @@ def self(request):
         else:
             if t_user.count() == 1:
                 t_coin = t_user[0].coins.all()[0]
-                t_coin.Coin = t_coin.Coin + 100
+                t_coin.Coin = t_coin.Coin + t_c
                 t_coin.save()
                 # flow
                 t_flow = CoinFlow.objects.create(
@@ -46,7 +54,7 @@ def self(request):
                     Title = '充值',
                     Type = 'Recharge',
                     TimeStamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
-                    Flow = 100
+                    Flow = t_c
                 )
                 return okMSG({'coin':t_coin.Coin})
             else:
