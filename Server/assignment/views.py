@@ -70,7 +70,8 @@ def getAsgResponse(start, count):
     response['assignments'] = []
     # 数据库操作
     try:
-        t_asg = Assignment.objects.all().reverse()[start:start+count]
+        # t_asg = Assignment.objects.all().reverse()[start:start+count]
+        t_asg = Assignment.objects.all()[start:start+count]
     except Exception as e:
         return None, 'db error when get rec asg'
     else:
