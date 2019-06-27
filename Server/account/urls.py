@@ -9,4 +9,5 @@ urlpatterns = [
     path('self', views.self, name='self'),
     path('password', views.changePassword, name='changePassword'),
     path('avatar', views.uploadAvatar, name='uploadAvatar'),
+    path('self/amount', views.amount, name='amount'),
 ]

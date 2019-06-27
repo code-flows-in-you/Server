@@ -319,3 +319,33 @@ def searchUser(t_uid):
         if t_user.count() == 1:
             return t_user[0], None
         return None, 'no such user'
+
+def amount(request):
+    # 要在登录状态下
+    if 'login_id' not in request.session:
+        return failMSG('no login')
+
+    if request.method != 'GET':
+        return failMSG('wrong method')
+
+    # 已经登录, 所以拿取用户信息
+    t_uid = request.session['login_id']
+    if type(t_uid) != type(1):
+        t_uid = int(t_uid)
+
+    t_user = searchUser(t_uid)
+
+    try:
+        response = {}
+        response['answerCount'] = t_user.qas.all().count()
+        response['bestCount'] = t_user.qab.all().count()
+        response['assignmentCount'] = t_user.asg.all().count()
+        response['coin'] = t_user.coins.all().count()
+    except Exception as e:
+        print(e)
+        return failMSG('create response error')
+    else:
+        return okMSG(response)
+
+    return failMSG('fail')
+    
