@@ -349,7 +349,7 @@ def getMyAsg(request, t_class):
         if err:
             return failMSG(err)
 
-        t_ans = t_user.qas.all()
+        t_ans = t_user.qas.all().order_by('-TimeStamp')
 
         try:
             t_asg = set()
